@@ -1,3 +1,4 @@
+import type { Pet } from '@prisma/client'
 import type { OrgRepository } from '../../../repositories/org.repository'
 import type { PetRepository } from '../../../repositories/pet.repository'
 import { OrgAlreadyExistsError } from '../../errors/org-already-exists'
@@ -12,13 +13,17 @@ export interface CreatePetServiceInput {
   org_id: string
 }
 
+export interface CreatePetServiceOutput {
+  pet: Pet
+}
+
 export class CreatePetService {
   constructor(
     private petRepository: PetRepository,
     private orgRepository: OrgRepository
   ) {}
 
-  async execute(data: CreatePetServiceInput) {
+  async execute(data: CreatePetServiceInput): Promise<CreatePetServiceOutput> {
     const isExistingOrg = await this.orgRepository.findById(data.org_id)
 
     if (!isExistingOrg) {

@@ -3,12 +3,13 @@ import { InMemoryOrgsRepository } from '../../../repositories/in-memory/in-memor
 import type { OrgRepository } from '../../../repositories/org.repository'
 import { OrgAlreadyExistsError } from '../../errors/org-already-exists'
 import type { PetRepository } from '../../../repositories/pet.repository'
-import { CreatePetService } from './create-pet.service'
 import { InMemoryPetRepository } from '../../../repositories/in-memory/in-memory-pet.repository'
+import { FindByCityPetService } from './find-by-city-pet.service'
+import { ResourceNotFoundError } from '../../errors/resource-not-found'
 
 let petRepository: PetRepository
 let orgRepository: OrgRepository
-let petService: CreatePetService
+let petService: FindByCityPetService
 
 const createOrg = {
   id: 'org-01',
@@ -25,7 +26,7 @@ const createOrg = {
   longitude: -49.3700684,
 }
 
-const createPet = {
+const createPet01 = {
   name: 'Alfredo',
   about: 'Eu sou um lindo doguindo de 3 anos.',
   age: 'Filhote',
@@ -35,25 +36,37 @@ const createPet = {
   org_id: 'org-01',
 }
 
-describe('Create Pet Service', () => {
+const createPet02 = {
+  name: 'Juca',
+  about: 'Eu sou um lindo doguindo de 3 anos.',
+  age: 'Filhote',
+  size: 'Pequeninho',
+  energy_level: 'Baixa',
+  environment: 'Ambiente amplo',
+  org_id: 'org-01',
+}
+
+describe('Find pets by city Service', () => {
   beforeEach(async () => {
     petRepository = new InMemoryPetRepository()
     orgRepository = new InMemoryOrgsRepository()
-    petService = new CreatePetService(petRepository, orgRepository)
+    petService = new FindByCityPetService(petRepository, orgRepository)
     await orgRepository.create(createOrg)
+    await petRepository.create(createPet01)
+    await petRepository.create(createPet02)
   })
-  it('should be able create pet', async () => {
-    const { pet } = await petService.execute(createPet)
+  it('should be able find pet by city', async () => {
+    const city = 'Benedito Novo'
+    const pets = await petService.execute({ city })
 
-    expect(pet.id).toEqual(expect.any(String))
+    expect(pets.pets.length).toEqual(2)
   })
 
-  it('should be able to return an error when providing a non-existing org', async () => {
+  it('must be able to return a non-existing city', async () => {
+    const city = 'Timbó'
+
     await expect(async () => {
-      await petService.execute({
-        ...createPet,
-        org_id: 'org-02',
-      })
-    }).rejects.toBeInstanceOf(OrgAlreadyExistsError)
+      await petService.execute({ city })
+    }).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

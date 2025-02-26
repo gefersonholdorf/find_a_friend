@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryOrgsRepository } from '../../../repositories/in-memory/in-memory-org.repository'
 import type { OrgRepository } from '../../../repositories/org.repository'
-import { OrgAlreadyExistsError } from '../../errors/org-already-exists'
 import type { PetRepository } from '../../../repositories/pet.repository'
-import { CreatePetService } from './create-pet.service'
 import { InMemoryPetRepository } from '../../../repositories/in-memory/in-memory-pet.repository'
+import { ResourceNotFoundError } from '../../errors/resource-not-found'
+import { FindByIdPetService } from './find-by-id-pet.service'
 
 let petRepository: PetRepository
 let orgRepository: OrgRepository
-let petService: CreatePetService
+let petService: FindByIdPetService
 
 const createOrg = {
   id: 'org-01',
@@ -25,7 +25,8 @@ const createOrg = {
   longitude: -49.3700684,
 }
 
-const createPet = {
+const createPet01 = {
+  id: 'pet-01',
   name: 'Alfredo',
   about: 'Eu sou um lindo doguindo de 3 anos.',
   age: 'Filhote',
@@ -35,25 +36,26 @@ const createPet = {
   org_id: 'org-01',
 }
 
-describe('Create Pet Service', () => {
+describe('Find Pet by id Service', () => {
   beforeEach(async () => {
     petRepository = new InMemoryPetRepository()
     orgRepository = new InMemoryOrgsRepository()
-    petService = new CreatePetService(petRepository, orgRepository)
+    petService = new FindByIdPetService(petRepository)
     await orgRepository.create(createOrg)
+    await petRepository.create(createPet01)
   })
-  it('should be able create pet', async () => {
-    const { pet } = await petService.execute(createPet)
+  it('should be able find pet by id', async () => {
+    const id = 'pet-01'
+    const { pet } = await petService.execute({ id })
 
     expect(pet.id).toEqual(expect.any(String))
   })
 
-  it('should be able to return an error when providing a non-existing org', async () => {
+  it('should be able to return an error when providing a non-existent id', async () => {
+    const id = 'pet-02'
+
     await expect(async () => {
-      await petService.execute({
-        ...createPet,
-        org_id: 'org-02',
-      })
-    }).rejects.toBeInstanceOf(OrgAlreadyExistsError)
+      await petService.execute({ id })
+    }).rejects.toBeInstanceOf(ResourceNotFoundError)
   })
 })

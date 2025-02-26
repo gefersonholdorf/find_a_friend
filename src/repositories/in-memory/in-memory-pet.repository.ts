@@ -7,7 +7,7 @@ export class InMemoryPetRepository implements PetRepository {
 
   async create(data: Prisma.PetUncheckedCreateInput): Promise<Pet> {
     const pet: Pet = {
-      id: randomUUID(),
+      id: data.id ? data.id : randomUUID(),
       name: data.name,
       about: data.about,
       age: data.age,
@@ -21,13 +21,45 @@ export class InMemoryPetRepository implements PetRepository {
 
     return pet
   }
-  async findByCity(city: string): Promise<Pet[] | null> {
-    throw new Error('Method not implemented.')
-  }
-  async findByCharacteristics(query: string[]): Promise<Pet[] | null> {
-    throw new Error('Method not implemented.')
+  async findByCharacteristics(query?: string[]): Promise<Pet[] | null> {
+    if (!query) {
+      return this.pets
+    }
+
+    const petFilter: Pet[] = this.pets.filter(pet =>
+      query.some(
+        q =>
+          pet.name.includes(q) ||
+          pet.about.includes(q) ||
+          pet.age.includes(q) ||
+          pet.size.includes(q) ||
+          pet.energy_level.includes(q) ||
+          pet.environment.includes(q)
+      )
+    )
+
+    if (petFilter.length <= 0) {
+      return null
+    }
+
+    return petFilter
   }
   async findById(id: string): Promise<Pet | null> {
-    throw new Error('Method not implemented.')
+    const pet = this.pets.find(pet => pet.id === id)
+
+    if (!pet) {
+      return null
+    }
+
+    return pet
+  }
+  async findByCity(orgs: string[]): Promise<Pet[] | null> {
+    const pets = this.pets.filter(pet => orgs.includes(pet.org_id))
+
+    if (pets.length <= 0) {
+      return null
+    }
+
+    return pets
   }
 }

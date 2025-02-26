@@ -1,6 +1,7 @@
 import { hash } from 'bcryptjs'
 import type { OrgRepository } from '../../../repositories/org.repository'
 import { OrgAlreadyExistsError } from '../../errors/org-already-exists'
+import type { Org } from '@prisma/client'
 
 export interface CreateOrgServiceInput {
   author_name: string
@@ -16,10 +17,14 @@ export interface CreateOrgServiceInput {
   longitude: number
 }
 
+export interface CreateOrgServiceOutput {
+  org: Org
+}
+
 export class CreateOrgService {
   constructor(private orgRepository: OrgRepository) {}
 
-  async execute(data: CreateOrgServiceInput) {
+  async execute(data: CreateOrgServiceInput): Promise<CreateOrgServiceOutput> {
     const orgWithExistingEmail = await this.orgRepository.findByEmail(
       data.email
     )
