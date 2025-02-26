@@ -1,5 +1,5 @@
 import type { Prisma, Pet } from '@prisma/client'
-import type { PetRepository } from '../pet.repository'
+import type { ParamsFindAll, PetRepository } from '../pet.repository'
 import { prismaClient } from '../../config/prisma/client'
 
 export class PrismaPetRepository implements PetRepository {
@@ -9,31 +9,6 @@ export class PrismaPetRepository implements PetRepository {
     })
 
     return pet
-  }
-  async findByCharacteristics(query: string[]): Promise<Pet[] | null> {
-    if (!query.length) {
-      const pets = await prismaClient.pet.findMany()
-      return pets
-    }
-
-    const pets = await prismaClient.pet.findMany({
-      where: {
-        OR: [
-          { name: { in: query } },
-          { about: { contains: query[0], mode: 'insensitive' } },
-          { age: { in: query } },
-          { size: { in: query } },
-          { energy_level: { in: query } },
-          { environment: { in: query } },
-        ],
-      },
-    })
-
-    if (!pets) {
-      return null
-    }
-
-    return pets
   }
   async findById(id: string): Promise<Pet | null> {
     const pet = await prismaClient.pet.findUnique({
@@ -48,18 +23,23 @@ export class PrismaPetRepository implements PetRepository {
 
     return pet
   }
-  async findByCity(orgs: string[]): Promise<Pet[] | null> {
+  async findAll(params: ParamsFindAll): Promise<Pet[] | null> {
     const pets = await prismaClient.pet.findMany({
       where: {
-        org_id: {
-          in: orgs,
+        name: params.name,
+        about: params.about,
+        age: params.age,
+        size: params.size,
+        energy_level: params.energy_level,
+        environment: params.environment,
+        org: {
+          city: {
+            contains: params.city,
+            mode: 'insensitive',
+          },
         },
       },
     })
-
-    if (!pets) {
-      return null
-    }
 
     return pets
   }

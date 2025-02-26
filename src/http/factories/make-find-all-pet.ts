@@ -2,13 +2,9 @@ import { PrismaOrgRepository } from '../../repositories/prisma/prisma-org.reposi
 import { PrismaPetRepository } from '../../repositories/prisma/prisma-pet.repository'
 import { FindByCityPetService } from '../services/pet/find-by-city-pet.service'
 
-export function makeFindByCityPet() {
+export function makeFindAllPet() {
   const petRepository = new PrismaPetRepository()
-  const orgRepository = new PrismaOrgRepository()
-  const findByCityPetService = new FindByCityPetService(
-    petRepository,
-    orgRepository
-  )
+  const findByCityPetService = new FindByCityPetService(petRepository)
 
   return findByCityPetService
 }

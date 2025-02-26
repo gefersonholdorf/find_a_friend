@@ -1,9 +1,9 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import type { FindByCityPetServiceInput } from '../../services/pet/find-by-city-pet.service'
-import { makeFindByCityPet } from '../../factories/make-find-by-city-pet'
+import { makeFindAllPet } from '../../factories/make-find-all-pet'
 
-export async function findByCityPetController(
+export async function findAllPetController(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
@@ -17,11 +17,11 @@ export async function findByCityPetController(
 
   const data = request.query as FindByCityPetServiceInput
 
-  const findByCityPetService = makeFindByCityPet()
+  const findByCityPetService = makeFindAllPet()
 
   const { pets } = await findByCityPetService.execute(data)
 
-  reply.status(201).send({
+  reply.status(200).send({
     pets,
   })
 }

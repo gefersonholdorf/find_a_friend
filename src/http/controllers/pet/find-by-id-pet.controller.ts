@@ -21,7 +21,7 @@ export async function findByIdPetController(
 
   const { pet } = await findByIdPetService.execute(data)
 
-  reply.status(201).send({
+  reply.status(200).send({
     pet,
   })
 }

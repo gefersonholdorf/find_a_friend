@@ -11,7 +11,7 @@ Os usuários podem explorar animais de estimação disponíveis, filtrá-los com
 - [S] Deve ser possível visualizar detalhes de um pet para adoção
 - [S] Deve ser possível se cadastrar como uma ORG
 - [S] Deve ser possível realizar login como uma ORG
-- [] Deve ser possível cadastrar apenas sendo um ORG
+- [] Deve ser possível cadastrar pet apenas sendo um ORG
 
 ### Regras de negócio
 
