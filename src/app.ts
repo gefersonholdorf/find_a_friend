@@ -2,10 +2,12 @@ import fastify from 'fastify'
 import { ZodError } from 'zod'
 import type { FastifyError, FastifyReply, FastifyRequest } from 'fastify'
 import { orgRoutes } from './http/routes/org.routes'
+import { petRoutes } from './http/routes/pet.routes'
 
 export const app = fastify()
 
 app.register(orgRoutes)
+app.register(petRoutes)
 
 app.get('/status', (request, reply) => {
   reply.send({

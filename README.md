@@ -11,6 +11,7 @@ Os usuários podem explorar animais de estimação disponíveis, filtrá-los com
 - [S] Deve ser possível visualizar detalhes de um pet para adoção
 - [S] Deve ser possível se cadastrar como uma ORG
 - [S] Deve ser possível realizar login como uma ORG
+- [] Deve ser possível cadastrar apenas sendo um ORG
 
 ### Regras de negócio
 
@@ -18,5 +19,5 @@ Os usuários podem explorar animais de estimação disponíveis, filtrá-los com
 - [S] Uma ORG precisa ter um endereço e um número de WhatsApp
 - [S] Um pet deve estar ligado a uma ORG
 - [] O usuário que quer adotar, entrará em contato com a ORG via WhatsApp
-- [] Todos os filtros, além da cidade, são opcionais
+- [S] Todos os filtros, além da cidade, são opcionais
 - [] Para uma ORG acessar a aplicação como admin, ela precisa estar logada
