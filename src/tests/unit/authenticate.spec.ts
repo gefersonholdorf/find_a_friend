@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { InMemoryOrgsRepository } from '../../../repositories/in-memory/in-memory-org.repository'
-import type { OrgRepository } from '../../../repositories/org.repository'
-import { AuthenticateOrgService } from './authenticate.service'
+import { InMemoryOrgsRepository } from '../../repositories/in-memory/in-memory-org.repository'
+import type { OrgRepository } from '../../repositories/org.repository'
+import { AuthenticateOrgService } from '../../http/services/org/authenticate.service'
 import { hash } from 'bcryptjs'
-import { InvalidCredencialsError } from '../../errors/invalid-credentials'
+import { InvalidCredencialsError } from '../../http/errors/invalid-credentials'
 
 let orgRepository: OrgRepository
 let orgService: AuthenticateOrgService

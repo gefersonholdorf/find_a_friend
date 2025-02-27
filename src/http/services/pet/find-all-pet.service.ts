@@ -5,18 +5,18 @@ import type {
 } from '../../../repositories/pet.repository'
 import { ResourceNotFoundError } from '../../errors/resource-not-found'
 
-export interface FindByCityPetServiceInput extends ParamsFindAll {}
+export interface FindAllPetServiceInput extends ParamsFindAll {}
 
-export interface FindByCityPetServiceOutput {
+export interface FindAllPetServiceOutput {
   pets: Pet[]
 }
 
-export class FindByCityPetService {
+export class FindAllPetService {
   constructor(private petRepository: PetRepository) {}
 
   async execute(
-    data: FindByCityPetServiceInput
-  ): Promise<FindByCityPetServiceOutput> {
+    data: FindAllPetServiceInput
+  ): Promise<FindAllPetServiceOutput> {
     const pets = await this.petRepository.findAll(data)
 
     if (!pets) {

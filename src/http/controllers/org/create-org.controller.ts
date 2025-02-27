@@ -27,7 +27,10 @@ export async function CreateOrgController(
 
   const data = request.body as CreateOrgServiceInput
 
-  await createOrgService.execute(data)
+  const { org } = await createOrgService.execute(data)
 
-  reply.status(201).send()
+  reply
+    .setCookie('org', org.id, { httpOnly: true, secure: false })
+    .status(201)
+    .send()
 }

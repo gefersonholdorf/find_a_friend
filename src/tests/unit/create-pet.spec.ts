@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { InMemoryOrgsRepository } from '../../../repositories/in-memory/in-memory-org.repository'
-import type { OrgRepository } from '../../../repositories/org.repository'
-import { OrgAlreadyExistsError } from '../../errors/org-already-exists'
-import type { PetRepository } from '../../../repositories/pet.repository'
-import { CreatePetService } from './create-pet.service'
-import { InMemoryPetRepository } from '../../../repositories/in-memory/in-memory-pet.repository'
+import { InMemoryOrgsRepository } from '../../repositories/in-memory/in-memory-org.repository'
+import type { OrgRepository } from '../../repositories/org.repository'
+import { OrgAlreadyExistsError } from '../../http/errors/org-already-exists'
+import type { PetRepository } from '../../repositories/pet.repository'
+import { CreatePetService } from '../../http/services/pet/create-pet.service'
+import { InMemoryPetRepository } from '../../repositories/in-memory/in-memory-pet.repository'
 
 let petRepository: PetRepository
 let orgRepository: OrgRepository
@@ -37,8 +37,8 @@ const createPet = {
 
 describe('Create Pet Service', () => {
   beforeEach(async () => {
-    petRepository = new InMemoryPetRepository()
     orgRepository = new InMemoryOrgsRepository()
+    petRepository = new InMemoryPetRepository(orgRepository)
     petService = new CreatePetService(petRepository, orgRepository)
     await orgRepository.create(createOrg)
   })

@@ -3,8 +3,11 @@ import { ZodError } from 'zod'
 import type { FastifyError, FastifyReply, FastifyRequest } from 'fastify'
 import { orgRoutes } from './http/routes/org.routes'
 import { petRoutes } from './http/routes/pet.routes'
+import fastifyCookie from 'fastify-cookie'
 
 export const app = fastify()
+
+app.register(fastifyCookie)
 
 app.register(orgRoutes)
 app.register(petRoutes)

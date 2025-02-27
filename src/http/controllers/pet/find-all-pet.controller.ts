@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
-import type { FindByCityPetServiceInput } from '../../services/pet/find-by-city-pet.service'
+import type { FindAllPetServiceInput } from '../../services/pet/find-all-pet.service'
 import { makeFindAllPet } from '../../factories/make-find-all-pet'
 
 export async function findAllPetController(
@@ -9,17 +9,23 @@ export async function findAllPetController(
 ) {
   const query = request.query
 
-  const findByCityPetSchema = z.object({
+  const findAllPetSchema = z.object({
     city: z.string(),
+    name: z.string().optional(),
+    about: z.string().optional(),
+    age: z.string().optional(),
+    size: z.string().optional(),
+    energy_level: z.string().optional(),
+    environment: z.string().optional(),
   })
 
-  await findByCityPetSchema.parse(query)
+  await findAllPetSchema.parse(query)
 
-  const data = request.query as FindByCityPetServiceInput
+  const data = request.query as FindAllPetServiceInput
 
-  const findByCityPetService = makeFindAllPet()
+  const findAllPetService = makeFindAllPet()
 
-  const { pets } = await findByCityPetService.execute(data)
+  const { pets } = await findAllPetService.execute(data)
 
   reply.status(200).send({
     pets,

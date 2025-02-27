@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { InMemoryOrgsRepository } from '../../../repositories/in-memory/in-memory-org.repository'
-import type { OrgRepository } from '../../../repositories/org.repository'
-import type { PetRepository } from '../../../repositories/pet.repository'
-import { InMemoryPetRepository } from '../../../repositories/in-memory/in-memory-pet.repository'
-import { ResourceNotFoundError } from '../../errors/resource-not-found'
-import { FindByIdPetService } from './find-by-id-pet.service'
+import { InMemoryOrgsRepository } from '../../repositories/in-memory/in-memory-org.repository'
+import type { OrgRepository } from '../../repositories/org.repository'
+import type { PetRepository } from '../../repositories/pet.repository'
+import { InMemoryPetRepository } from '../../repositories/in-memory/in-memory-pet.repository'
+import { ResourceNotFoundError } from '../../http/errors/resource-not-found'
+import { FindByIdPetService } from '../../http/services/pet/find-by-id-pet.service'
 
 let petRepository: PetRepository
 let orgRepository: OrgRepository
@@ -36,10 +36,10 @@ const createPet01 = {
   org_id: 'org-01',
 }
 
-describe('Find Pet by id Service', () => {
+describe('[UNIT] Find Pet by id Service', () => {
   beforeEach(async () => {
-    petRepository = new InMemoryPetRepository()
     orgRepository = new InMemoryOrgsRepository()
+    petRepository = new InMemoryPetRepository(orgRepository)
     petService = new FindByIdPetService(petRepository)
     await orgRepository.create(createOrg)
     await petRepository.create(createPet01)

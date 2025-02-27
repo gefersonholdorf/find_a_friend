@@ -1,9 +1,9 @@
-import { beforeEach, describe, expect, it } from 'vitest'
-import { InMemoryOrgsRepository } from '../../../repositories/in-memory/in-memory-org.repository'
-import { CreateOrgService } from './create-org.service'
-import type { OrgRepository } from '../../../repositories/org.repository'
 import { compare } from 'bcryptjs'
-import { OrgAlreadyExistsError } from '../../errors/org-already-exists'
+import { beforeEach, describe, expect, it } from 'vitest'
+import type { OrgRepository } from '../../repositories/org.repository'
+import { CreateOrgService } from '../../http/services/org/create-org.service'
+import { InMemoryOrgsRepository } from '../../repositories/in-memory/in-memory-org.repository'
+import { OrgAlreadyExistsError } from '../../http/errors/org-already-exists'
 
 let orgRepository: OrgRepository
 let orgService: CreateOrgService
